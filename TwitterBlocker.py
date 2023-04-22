@@ -4,11 +4,25 @@
 Created on Sat Apr 22 05:36:13 2023
 @author: saraheaglesfield
 """
+import time
+import csv
 from requests_oauthlib import OAuth1Session
 import os
-import csv
-import time
 
+def read_user_ids_from_csv(file_path):
+    user_ids = []
+    with open(file_path, newline='') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            user_ids.append(row[0])
+    return user_ids
+
+def handle_rate_limit(response):
+    if response.status_code == 429:
+        reset_time = int(response.headers['x-rate-limit-reset'])
+        wait_time = reset_time - int(time.time())
+        print(f"Rate limit exceeded. Waiting for {wait_time} seconds.")
+        time.sleep(wait_time + 1)
 
 # In your terminal please set your environment variables by running the following lines of code.
 # export 'CONSUMER_KEY'='<your_consumer_key>'
@@ -19,10 +33,12 @@ consumer_secret = os.environ.get("CONSUMER_SECRET")
 
 # Be sure to replace your-user-id with your own user ID or one of an authenticating user
 # You can find a user ID by using the user lookup endpoint
-id = "12345678"
+id = "15777543"
 
-# CSV file containing list of user IDs to block
-filename = "accounts.csv"
+# Replace this line with the path to your CSV file containing user IDs
+csv_file_path = "/Volumes/Data/accounts.csv"
+
+user_ids = read_user_ids_from_csv(csv_file_path)
 
 # Get request token
 request_token_url = "https://api.twitter.com/oauth/request_token"
@@ -37,29 +53,14 @@ resource_owner_key = fetch_response.get("oauth_token")
 resource_owner_secret = fetch_response.get("oauth_token_secret")
 print("Got OAuth token: %s" % resource_owner_key)
 
-# Be sure to replace Access Token & Access Secret
-access_token = "134242-dsojKOLKorperksopdmlsdmd;sl"
-access_token_secret = "dsl;oOiwpoasmd;lkosegml;kmglsd,l;s,"
+access_token = "15777543-DeuQIPMVhjmeOzlkM9U2n8kbDlc2ziYMIYKlH21fh"
+access_token_secret = "betj2gJp4LTCeW0WHJjPHMP79Z6rS9lcoiyLpNusS9PsG"
 print("Got Access token: %s" % resource_owner_key)
 
-# Read user IDs from CSV file
-user_ids = []
-with open(filename, "r") as csvfile:
-    reader = csv.reader(csvfile)
-    for row in reader:
-        user_ids.append(row[0])
 
-# Loop over user IDs and block each user
-request_count = 0
 for target_user_id in user_ids:
-    # Rate limit to 50 requests every 15 minutes
-    if request_count >= 50:
-        print("Waiting 15 minutes for rate limit...")
-        time.sleep(900)
-        request_count = 0
-    
     payload = {"target_user_id": target_user_id}
-    # Make the request
+    
     oauth = OAuth1Session(
         consumer_key,
         client_secret=consumer_secret,
@@ -69,12 +70,13 @@ for target_user_id in user_ids:
     response = oauth.post(
         "https://api.twitter.com/2/users/{}/blocking".format(id), json=payload
     )
+    
     if response.status_code != 200:
         print(
             "Error blocking user {}: {} {}".format(
                 target_user_id, response.status_code, response.text
             )
         )
+        handle_rate_limit(response)
     else:
         print("Successfully blocked user {}".format(target_user_id))
-        request_count += 1
