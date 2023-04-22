@@ -33,7 +33,7 @@ consumer_secret = os.environ.get("CONSUMER_SECRET")
 
 # Be sure to replace your-user-id with your own user ID or one of an authenticating user
 # You can find a user ID by using the user lookup endpoint
-id = "15777543"
+id = "123435"
 
 # Replace this line with the path to your CSV file containing user IDs
 csv_file_path = "/Volumes/Data/accounts.csv"
@@ -53,8 +53,9 @@ resource_owner_key = fetch_response.get("oauth_token")
 resource_owner_secret = fetch_response.get("oauth_token_secret")
 print("Got OAuth token: %s" % resource_owner_key)
 
-access_token = "15777543-DeuQIPMVhjmeOzlkM9U2n8kbDlc2ziYMIYKlH21fh"
-access_token_secret = "betj2gJp4LTCeW0WHJjPHMP79Z6rS9lcoiyLpNusS9PsG"
+# Be sure to replace with your own access_token
+access_token = "15232443-dssgdssdsgdss"
+access_token_secret = "bsdsdsddsssG"
 print("Got Access token: %s" % resource_owner_key)
 
 
