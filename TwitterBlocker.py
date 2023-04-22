@@ -1,12 +1,14 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Apr 22 05:36:13 2023
+@author: saraheaglesfield
+"""
 from requests_oauthlib import OAuth1Session
 import os
 import csv
 import time
 
-"""
-Created on Sat Apr 22 05:36:13 2023
-@author: saraheaglesfield
-"""
 
 # In your terminal please set your environment variables by running the following lines of code.
 # export 'CONSUMER_KEY'='<your_consumer_key>'
