@@ -14,7 +14,8 @@ def read_user_ids_from_csv(file_path):
     with open(file_path, newline='') as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
-            user_ids.append(row[0])
+            user_ids.append(int(row[0]))
+    user_ids.sort(reverse=True)
     return user_ids
 
 def handle_rate_limit(response):
@@ -33,7 +34,7 @@ consumer_secret = os.environ.get("CONSUMER_SECRET")
 
 # Be sure to replace your-user-id with your own user ID or one of an authenticating user
 # You can find a user ID by using the user lookup endpoint
-id = "123435"
+id = "123456"
 
 # Replace this line with the path to your CSV file containing user IDs
 csv_file_path = "/Volumes/Data/accounts.csv"
@@ -53,14 +54,14 @@ resource_owner_key = fetch_response.get("oauth_token")
 resource_owner_secret = fetch_response.get("oauth_token_secret")
 print("Got OAuth token: %s" % resource_owner_key)
 
-# Be sure to replace with your own access_token
-access_token = "15232443-dssgdssdsgdss"
-access_token_secret = "bsdsdsddsssG"
+# Replace these lines with your access token & secret
+access_token = "xxxxxxxxxxxx"
+access_token_secret = "xxxxxxxxxxxx"
 print("Got Access token: %s" % resource_owner_key)
 
 
 for target_user_id in user_ids:
-    payload = {"target_user_id": target_user_id}
+    payload = {"target_user_id": str(target_user_id)}
     
     oauth = OAuth1Session(
         consumer_key,
