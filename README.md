@@ -5,3 +5,4 @@
 3. Tweetgrab - Makes a CSV of a users tweets
 4. Sample_Followers - Save user's followers to a CSV, generate a random sample of 100.
 5. Twitter_IDs - Convert Twitter Usernames to Twitter IDs
+6. TwitterBlocker - Block a (small-ish) list of Twitter Users from a CSV
