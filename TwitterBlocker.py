@@ -5,10 +5,37 @@ Created on Sat Apr 22 05:36:13 2023
 @author: saraheaglesfield
 Twitter Block v1.0
 """
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Apr 22 05:36:13 2023
+@author: saraheaglesfield
+Twitter Block v1.0
+"""
 import time
 import csv
+import requests
+from requests_oauthlib import OAuth1
 from requests_oauthlib import OAuth1Session
+import json
 import os
+
+#Set these values in your environment using export
+CONSUMER_KEY = os.environ.get("CONSUMER_KEY")
+CONSUMER_SECRET = os.environ.get("CONSUMER_SECRET")
+BEARER_TOKEN = os.environ.get("BEARER_TOKEN")
+ACCESS_TOKEN = os.environ.get("ACCESS_TOKEN")
+ACCESS_TOKEN_SECRET = os.environ.get("ACCESS_TOKEN_SECRET")
+
+oauth = OAuth1(CONSUMER_KEY,
+               client_secret=CONSUMER_SECRET,
+               resource_owner_key=ACCESS_TOKEN,
+               resource_owner_secret=ACCESS_TOKEN_SECRET)
+
+headers = {
+    "Authorization": f"Bearer {BEARER_TOKEN}",
+    "Content-Type": "application/json",
+}
 
 def read_user_ids_from_csv(file_path):
     user_ids = []
@@ -27,50 +54,24 @@ def handle_rate_limit(response):
         time.sleep(wait_time + 1)
         return True
     return False
-# In your terminal please set your environment variables by running the following lines of code.
-# export 'CONSUMER_KEY'='<your_consumer_key>'
-# export 'CONSUMER_SECRET'='<your_consumer_secret>'
 
-consumer_key = os.environ.get("CONSUMER_KEY")
-consumer_secret = os.environ.get("CONSUMER_SECRET")
-
-# Be sure to replace your-user-id with your own user ID or one of an authenticating user
-# You can find a user ID by using the user lookup endpoint
-id = "15777543"
+# Your Twitter ID
+id = "12345678"
 
 # Replace this line with the path to your CSV file containing user IDs
-csv_file_path = "/Volumes/Data/accounts.csv"
+csv_file_path = "accounts.csv"
 
 user_ids = read_user_ids_from_csv(csv_file_path)
-
-# Get request token
-request_token_url = "https://api.twitter.com/oauth/request_token"
-oauth = OAuth1Session(consumer_key, client_secret=consumer_secret)
-
-try:
-    fetch_response = oauth.fetch_request_token(request_token_url)
-except ValueError:
-    print("There may have been an issue with the consumer_key or consumer_secret you entered.")
-
-resource_owner_key = fetch_response.get("oauth_token")
-resource_owner_secret = fetch_response.get("oauth_token_secret")
-print("Got OAuth token: %s" % resource_owner_key)
-
-access_token = "15777543-DeuQIPMVhjmeOzlkM9U2n8kbDlc2ziYMIYKlH21fh"
-access_token_secret = "betj2gJp4LTCeW0WHJjPHMP79Z6rS9lcoiyLpNusS9PsG"
-print("Got Access token: %s" % resource_owner_key)
 
 
 for target_user_id in user_ids:
     payload = {"target_user_id": str(target_user_id)}
     
     while True:
-        oauth = OAuth1Session(
-            consumer_key,
-            client_secret=consumer_secret,
-            resource_owner_key=access_token,
-            resource_owner_secret=access_token_secret,
-        )
+        oauth = OAuth1Session(CONSUMER_KEY,
+               client_secret=CONSUMER_SECRET,
+               resource_owner_key=ACCESS_TOKEN,
+               resource_owner_secret=ACCESS_TOKEN_SECRET)
         response = oauth.post(
             "https://api.twitter.com/2/users/{}/blocking".format(id), json=payload
         )
