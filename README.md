@@ -7,3 +7,4 @@
 5. Twitter_IDs - Convert Twitter Usernames to Twitter IDs
 6. TwitterBlocker - Block a list of Twitter Users from a CSV. Rate limited to 50 requests per 15 mins.
 7. deletetweets - Deletes all tweets by authenticated user.
+8. bulkunlike - Unlike tweets en masse
