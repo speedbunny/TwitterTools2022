@@ -6,3 +6,4 @@
 4. Sample_Followers - Save user's followers to a CSV, generate a random sample of 100.
 5. Twitter_IDs - Convert Twitter Usernames to Twitter IDs
 6. TwitterBlocker - Block a list of Twitter Users from a CSV. Rate limited to 50 requests per 15 mins.
+7. deletetweets - Deletes all tweets by authenticated user.
