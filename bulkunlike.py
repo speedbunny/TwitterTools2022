@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Apr 23 17:36:33 2023
+@author: saraheaglesfield
+Warning: this will delete ALL your tweets
+"""
+
 import os
 import requests
 from requests_oauthlib import OAuth1
